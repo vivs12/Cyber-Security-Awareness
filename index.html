@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cyber Security Awareness</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root{
+      --page-bg: #071022;
+      --overlay: rgba(3,8,14,0.72);
+      --text: #e5e7eb;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--page-bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      color-scheme: dark;
+    }
+
+    .video-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .video-bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Înnegrește video-ul pentru consistență între browsere */
+    .video-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--overlay);
+      z-index: 5;
+      pointer-events: none;
+      mix-blend-mode: normal;
+    }
+
+    .page-content {
+      position: relative;
+      z-index: 10;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-overlay"></div>
+<!-- VIDEO BACKGROUND -->
+<div class="video-bg">
+  <video autoplay muted loop playsinline>
+    <source src="videocyberpunk.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- OVERLAY -->
+<div class="video-overlay"></div>
+
+<div class="page-content">
+
+ <!-- ================= HEADER FIX ================= -->
+<header class="main-header">
+  <div class="header-container">
+    <button id="homeBtn" class="header-btn home-btn">🏠</button>
+    <button id="menuToggle" class="header-btn menu-btn">☰ Meniu</button>
+    <button id="simulateAttackBtn" class="header-btn">Simulare atac</button>
+    <button id="miniTestHeaderBtn" class="header-btn">Mini Test</button>
+  </div>
+</header>
+
+<div id="menuOverlay" class="menu-overlay hidden"></div>
+<nav id="sideMenu" class="side-menu hidden">
+  <div class="menu-header">
+    <h3>Meniu</h3>
+    <button id="closeMenu" class="close-menu">&times;</button>
+  </div>
+  <button class="menu-item" data-section="hero">Introducere</button>
+  <button class="menu-item" data-section="danger">De ce este periculoasă</button>
+  <button class="menu-item" data-section="psychology">Psihologia din spatele atacului</button>
+  <button class="menu-item" data-section="duel">Atacator vs Utilizator</button>
+  <button class="menu-item" data-section="how-it-works">Cum funcționează</button>
+  <button class="menu-item" data-section="types">Tipuri de atacuri</button>
+  <button class="menu-item" data-section="signs">Semnele unui atac</button>
+  <button class="menu-item" data-section="protection">Cum te protejezi</button>
+</nav>
+
+
+
+  <!-- ================= HERO ================= -->
+<section class="section hero reveal" id="hero">
+  <div class="container">
+
+    <!-- GRID HERO -->
+    <div class="hero-content hero-grid">
+
+      <!-- STÂNGA: TEXT -->
+      <div class="hero-left">
+
+        <h1 class="hero-title" style="font-size:90px; font-family: 'Times New Roman', Times, serif; padding-bottom: 60px; padding-top: 40px;">Ingineria socială</h1>
+
+        <h2 class="hero-subtitle" style="font-size:40px;">
+          Cel mai periculos atac nu sparge sisteme.<br>
+          Te convinge să le deschizi singur.
+        </h2>
+
+        <p class="hero-text" style="font-family:'Times New Roman'; font-size:30px;">
+          Majoritatea atacurilor cibernetice moderne exploatează comportamentul uman,
+          nu vulnerabilități tehnice.
+        </p>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span style="font-size:40px;">91%</span>
+            <p style="font-size:25px; font-family: 'Times New Roman', Times, serif;">
+              atacuri pornesc cu <span style="color:red; font-family: 'Times New Roman', Times, serif;">phishing</span>
+            </p>
+          </div>
+
+          <div class="hero-stat">
+            <span style="font-size:40px;">82%</span>
+            <p style="font-size:25px; font-family: 'Times New Roman', Times, serif;">
+              implică factor <span style="color:red; font-family: 'Times New Roman', Times, serif;">uman</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <button id="simulateBtn" style="font-family: 'Times New Roman', Times, serif;">⚠️ Simulează atac</button>
+          <button id="resetBtn" style="font-family: 'Times New Roman', Times, serif;">🔄 Reset</button>
+        </div>
+
+        <div id="attack-log" class="attack-log hidden"></div>
+
+      </div>
+
+      <!-- DREAPTA: ANIMAȚIE HACKER -->
+      <div class="hero-right">
+
+        <lottie-player
+          src="A hacker breaks into a program.json"
+          background="transparent"
+          speed="1"
+          loop
+          autoplay
+          style="width: 1000px; height: 1000px;">
+        </lottie-player>
+
+      </div>
+
+    </div>
+  </div>
+
+    <!-- Email Popup Modal -->
+    <div id="emailModal" class="email-modal hidden">
+      <div class="email-modal-content">
+        <div class="email-header">
+          <span class="email-from">no-reply@bank.ro</span>
+          <button id="closeModal" class="email-close">&times;</button>
+        </div>
+        <div class="email-subject">
+          ⚠️ Acțiune necesară: Contul tău va fi suspendat
+        </div>
+        <div class="email-body">
+          <p>Dragă utilizator,</p>
+          <p>Am detectat activitate suspectă pe contul tău. Pentru a proteja informațiile tale, trebuie să confirmi identitatea imediat.</p>
+          <p style="margin: 20px 0; text-align: center;">
+            <button id="confirmIdentityBtn" class="email-action-btn">Confirma Identitate</button>
+          </p>
+        </div>
+      </div>
+      <div class="email-modal-overlay"></div>
+    </div>
+
+<!-- MODAL -->
+<div id="loginModal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Confirmare identitate</h3>
+
+    <p class="hint">
+      ℹ️ Indiciu: <strong>admin</strong> (username și parolă)
+    </p>
+
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Parolă">
+
+    <button id="loginBtn">Conectare</button>
+    <button id="closeLoginModal" class="modal-close">Ieșire</button>
+    <p id="loginMessage" class="success hidden">
+      ✅ Mulțumim pentru timpul acordat! Contul dumneavoastră este protejat.
+    </p>
+  </div>
+</div>
+  </div>
+</section>
+
+
+<!-- DE CE ESTE PERICULOASĂ -->
+<section class="section reveal" id="danger">
+  <h2 style="font-size: 40px; font-family: 'Times New Roman', Times, serif;">De ce este atât de periculoasă?</h2>
+  <p class="center-text" style="font-size: 30px; font-family: 'Times New Roman', Times, serif;">
+    Pentru că se bazează pe emoții, nu pe cod.
+    Iar emoțiile sunt greu de filtrat.
+  </p>
+
+  <!-- Flip Cards Grid -->
+  <div class="danger-cards-grid">
+    <!-- Card 1 -->
+    <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <h3 style="font-family: 'Times New Roman', Times, serif;">Exploatează încrederea oamenilor</h3>
+        </div>
+        <div class="flip-card-back">
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 Atacatorii pot pretinde că sunt colegi, reprezentanți ai unei instituții sau suport tehnic.</p>
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 Persoanele tind să fie cooperative sau politicoase, iar acest instinct poate fi folosit împotriva lor.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <h3 style="font-family: 'Times New Roman', Times, serif;">Acces la informații sensibile</h3>
+        </div>
+        <div class="flip-card-back">
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 Poate permite accesul la parole, date financiare, documente confidențiale sau sisteme interne.</p>
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 De exemplu, un email aparent legitim poate convinge un angajat să dea parola.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <h3 style="font-family: 'Times New Roman', Times, serif;">Dificil de detectat</h3>
+        </div>
+        <div class="flip-card-back">
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 Nu implică neapărat malware sau hacking tehnic.</p>
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 Este greu de identificat deoarece atacul poate părea "normal" sau "obișnuit".</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <h3 style="font-family: 'Times New Roman', Times, serif;">Poate provoca daune mari</h3>
+        </div>
+        <div class="flip-card-back">
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 Pierderi financiare (fraude bancare, furt de fonduri).</p>
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 Pierderi de reputație pentru companii.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <h3 style="font-family: 'Times New Roman', Times, serif;">Se bazează pe emoții</h3>
+        </div>
+        <div class="flip-card-back">
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 Frica, graba, lăcomia sau dorința de a ajuta pot fi exploatate.</p>
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 Exemple: email-uri care avertizează că "contul va fi blocat" sau oferte prea bune ca să fie adevărate.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+  <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <h3 style="font-family: 'Times New Roman', Times, serif;">Se adaptează rapid la context</h3>
+        </div>
+        <div class="flip-card-back">
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 Atacatorii pot folosi informații publice (social media, website-uri) pentru a crea atacuri foarte credibile.</p>
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 Exemplu: știe cine este managerul tău și ce proiecte ai, astfel încât mesajul să pară autentic.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 7 -->
+  <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <h3 style="font-family: 'Times New Roman', Times, serif;">Poate fi începutul unui atac mai mare</h3>
+        </div>
+        <div class="flip-card-back">
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 Un simplu mesaj sau apel poate fi doar “prima etapă” pentru compromiterea întregii rețele.</p>
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 De exemplu, obținerea unei parole poate permite accesul la servere, email-uri și date sensibile.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 8 -->
+  <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <h3 style="font-family: 'Times New Roman', Times, serif;">Afectează psihologic victimele</h3>
+        </div>
+        <div class="flip-card-back">
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 O persoană păcălită poate simți rușine, vinovăție sau anxietate, ceea ce poate reduce vigilența pe viitor.</p>
+          <p style="font-family: 'Times New Roman', Times, serif;">🔍 Atacatorii profită de acest lucru pentru a continua manipularea sau pentru a implica și alte persoane.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- MINI TEST PHISHING -->
+<div style="text-align:center; margin-top:40px;">
+  <button id="simulatePhishingBtn" class="cta primary" style="font-family: 'Times New Roman', Times, serif; background: linear-gradient(135deg, #82b7ff, #4a79ef) !important;">
+    ⚠️ Simulează atac (mini‑test)
+  </button>
+</div>
+
+<div id="phishingTest" class="email-modal hidden">
+  <div class="email-modal-content">
+
+    <!-- HEADER -->
+    <div class="email-header">
+      <span class="email-from">YourOSPBank-Oficial@yamoo.com</span>
+      <button id="closePhishingTest" class="email-close">&times;</button>
+    </div>
+
+    <!-- SUBJECT -->
+    <div class="email-subject">
+      ⚠️ Alertă securitate – card blocat
+    </div>
+
+    <!-- BODY -->
+    <div class="email-body">
+      <p>Bună ziua,</p>
+
+      <p>
+        Am detectat o activitate suspicioasă în ceea ce privesc tranzacțiile
+        de pe cardul dumneavoastră de credit cu terminația <strong>1234</strong>,
+        acesta fiind blocat de către noi din condiții de siguranță.
+      </p>
+
+      <p>
+        Dacă nu ați efectuat dumneavoastră tranzacții în data de
+        <strong>13.01.2026</strong>, vă rugăm să accesați link-ul atașat și
+        să introduceți datele cardului pentru a îl debloca.
+      </p>
+
+      <p>
+        <a href="#" class="fake-link">
+          www.acces.my.account@OPSBANK.com
+        </a>
+      </p>
+
+      <p>O zi frumoasă!</p>
+
+      <hr>
+
+      <!-- RASPUNSURI -->
+      <h4>Ce ai face în această situație?</h4>
+
+      <div class="answer-grid">
+        <button class="answer wrong">
+          Accesez link-ul și introduc datele cardului
+        </button>
+
+        <button class="answer wrong">
+          Răspund la email pentru a cere mai multe detalii
+        </button>
+
+        <button class="answer correct">
+          Nu accesez link-ul și contactez banca printr-un canal oficial
+        </button>
+      </div>
+
+      <p id="answerResult" class="result-message hidden"></p>
+    </div>
+  </div>
+
+  <div class="email-modal-overlay"></div>
+</div>
+</section>
+
+<!-- PSIHOLOGIA ATACULUI -->
+<section class="section reveal psychology" id="psychology">
+  <h2 style="font-size: 40px;">Psihologia din spatele atacului</h2>
+
+  <h3 style="font-size:23px; font-family: 'Times New Roman', Times, serif;">În general, manipularea psihologică are ca scop împiedicarea persoanelor de a evalua corect autenticitatea informațiilor primite. Acest lucru se realizează prin limitarea capacității de analiză critică a individului. Astfel de tehnici de manipulare pot include:</h3>
+  <div class="psy-grid">
+    <div class="psy-card">
+      <h3 style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">🧠 Mesaje subliminale</h3>
+      <p style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">Transmiterea mesajelor într-un mod subliminal, sub nivelul percepției conștiente.</p>
+    </div>
+    <div class="psy-card">
+      <h3 style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">📚 Suprainformație</h3>
+      <p style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">Expunerea la un volum excesiv de informații, care depășește capacitatea de procesare și analiză critică a memoriei.</p>
+    </div>
+    <div class="psy-card">
+      <h3 style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">😴 Exploatarea oboselii mentale</h3>
+      <p style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">Valorificarea momentelor de oboseală mentală, atunci când atenția este redusă sau direcționată către alte activități, iar resursele cognitive sunt diminuate.</p>
+    </div>
+    <div class="psy-card">
+      <h3 style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">✅ Încrederea în surse aparent credibile</h3>
+      <p style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">Prezentarea informațiilor ca provenind din surse considerate de încredere, determinând astfel suspendarea procesului de verificare și analiză.</p>
+    </div>
+  </div>
+
+
+  <br><br><h2 class="psychology-subtitle">Exemple de abordări ale atacurilor psihologice</h2>
+<div class="hex-container">
+
+  <div class="hex-card">
+    <div class="hex-content front" style="font-family: 'Times New Roman', Times, serif;">⏱️ Urgență / Presiune</div>
+    <div class="hex-content back" style="font-family: 'Times New Roman', Times, serif;">
+      Atacatorii forțează luarea rapidă a unei decizii pentru a elimina analiza critică.<br> Ex: Un email care spune „Contul tău va fi suspendat în 1 oră. Apasă aici pentru a-l salva!”
+    </div>
+  </div>
+
+  <div class="hex-card">
+    <div class="hex-content front" style="font-family: 'Times New Roman', Times, serif;">👔 Autoritate</div>
+    <div class="hex-content back" style="font-family: 'Times New Roman', Times, serif;">
+      Mesajele pretind că provin de la instituții sau persoane cu putere.<br> Ex:Un mesaj care pretinde că vine de la banca ta sau de la IT-ul companiei și cere parola.
+    </div>
+  </div>
+
+  <div class="hex-card">
+    <div class="hex-content front" style="font-family: 'Times New Roman', Times, serif;">🎁 Recompensă</div>
+    <div class="hex-content back" style="font-family: 'Times New Roman', Times, serif;">
+      Promisiuni de câștig sau beneficii pentru a convinge victima să acționeze.<br> Ex: „Ai câștigat un voucher de 100$! Click aici pentru a-l revendica.”
+    </div>
+  </div>
+
+  <div class="hex-card">
+    <div class="hex-content front" style="font-family: 'Times New Roman', Times, serif;">😨 Frică / Amenințare</div>
+    <div class="hex-content back" style="font-family: 'Times New Roman', Times, serif;">
+      Se creează panică prin amenințări legate de conturi, bani sau date.<br> Ex: „Sistemul tău a fost compromis! Dacă nu faci click aici, vei pierde toate datele.”
+    </div>
+  </div>
+
+  <div class="hex-card">
+    <div class="hex-content front" style="font-family: 'Times New Roman', Times, serif;">🫂 Conexiune socială</div>
+    <div class="hex-content back" style="font-family: 'Times New Roman', Times, serif;">
+      Exploatarea empatiei și dorinței de a ajuta.<br> Ex: "Bună, sunt colegul tău și am nevoie urgentă de ajutor cu o suma de bani. Te rog să mă ajuți!"
+    </div>
+  </div>
+
+  <div class="hex-card">
+    <div class="hex-content front" style="font-family: 'Times New Roman', Times, serif;">💬 Reciprocitate</div>
+    <div class="hex-content back" style="font-family: 'Times New Roman', Times, serif;">
+      Victima simte obligația de a oferi ceva în schimb.<br> Ex: „Îți oferim acces gratuit la acest serviciu dacă ne trimiți datele tale.”
+    </div>
+  </div>
+
+</div>
+
+<button class="start-quiz-btn" onclick="startQuiz()" style="font-family: 'Times New Roman', Times, serif; background: linear-gradient(135deg, #82b7ff, #4a79ef) !important;">
+  🧠 Începe quiz-ul 
+</button>
+
+<div class="psych-quiz hidden" id="psychQuiz">
+
+  <div class="quiz-progress">
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <span class="progress-text" id="progressText">Scenariul 1 / 5</span>
+</div>
+
+  <h3>🧠 Quiz: Psihologia din spatele atacului</h3>
+
+  <p id="scenarioText" class="quiz-question"></p>
+
+  <div class="quiz-options" id="quizOptions"></div>
+
+  <button class="quiz-btn" onclick="checkAnswer()">Verifică</button>
+  <button class="quiz-btn secondary" onclick="nextScenario()" style="display:none;" id="nextBtn">
+    Următorul scenariu →
+  </button>
+
+  <div class="quiz-feedback" id="quizFeedback"></div>
+</div>
+
+</section>
+
+<!-- ATACATOR VS VICTIMĂ -->
+<section class="section reveal duel" id="duel">
+  <h2 style="font-size: 40px;">Atacator vs Utilizator</h2>
+
+     <div class="duel-intro">
+  <p class="lead-text" style="font-family: 'Times New Roman', Times, serif; font-size: 23px;">
+      Această secțiune compară direct modul în care atacatorii gândesc și acționează
+      cu deciziile corecte pe care un utilizator informat le poate lua.<br>
+      Tehnicile folosite variază de la phishing și pretexting, până la baiting sau tailgating, 
+      iar scopul lor principal este obținerea de date sensibile, bani sau control asupra unor sisteme, fără a fi detectat.<br>
+      Pe de altă parte, utilizatorul obișnuit poate fi orice persoană care folosește servicii digitale sau lucrează într-un mediu corporativ.
+      De multe ori, vulnerabilitatea utilizatorului apare din încrederea excesivă în autoritate, lipsa de atenție la detalii sau frica de repercusiuni.<br>
+      Prin educație și conștientizare, utilizatorii pot învăța să recunoască și să evite aceste atacuri, protejându-se pe ei înșiși și organizațiile din care fac parte.
+    </p>
+    </div>
+
+  <div class="duel-grid">
+
+    <!-- ATACATOR -->
+    <div class="side attacker">
+      <h3>🟥 Cum acționează atacatorul</h3>
+
+      <p class="side-desc" style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">
+        Atacatorul caută greșeli umane, nu sisteme perfecte. Scopul său este să creeze
+        contexte în care utilizatorul ia decizii rapide și greșite.
+      </p>
+
+      <div class="info-card" data-info="phishing" style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">
+        🎣 Phishing
+      </div>
+      <div class="info-card" data-info="social" style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">
+        🧠 Social Engineering
+      </div>
+      <div class="info-card" data-info="passwords" style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">
+        🔓 Exploatarea parolelor
+      </div>
+      <div class="info-card" data-info="attachments" style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">
+        📎 Malware și atașamente
+      </div>
+    </div>
+
+    <div class="vs">VS</div>
+
+    <!-- UTILIZATOR -->
+    <div class="side defender">
+      <h3>🟦 Cum se apără utilizatorul</h3>
+
+      <p class="side-desc" style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">
+        Un utilizator informat nu reacționează impulsiv. El verifică, analizează și
+        aplică măsuri simple care pot bloca majoritatea atacurilor.
+      </p>
+
+      <div class="info-card" data-info="verify" style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">
+        🔍 Verificarea sursei
+      </div>
+      <div class="info-card" data-info="calm" style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">
+        🧘 Control emoțional
+      </div>
+      <div class="info-card" data-info="2fa" style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">
+        🔐 Autentificare în doi pași
+      </div>
+      <div class="info-card" data-info="update" style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">
+        🔄 Igienă digitală
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INFO EXTINS -->
+  <div class="info-box hidden" id="infoBox">
+    <h4 id="infoTitle"></h4>
+    <p id="infoText"></p>
+    <button class="cta secondary" onclick="closeInfo()">Închide</button>
+  </div>
+
+</section>
+
+  <!-- INFO BOX -->
+  <div class="info-box hidden" id="infoBox">
+    <h4 id="infoTitle"></h4>
+    <p id="infoText"></p>
+    <button class="cta secondary" onclick="closeInfo()">Închide</button>
+  </div>
+</section>
+
+<!-- TRANZIȚIE -->
+<section class="section reveal transition">
+  <h2 style="font-family: 'Times New Roman', Times, serif; font-size: 50px;">
+    Un atac de inginerie socială<br>
+    <span style="font-family: 'Times New Roman', Times, serif; font-size: 50px;">nu este întâmplător.</span>
+  </h2>
+  <p style="font-family: 'Times New Roman', Times, serif; font-size: 30px;">
+    Este un proces clar, construit pas cu pas.
+  </p>
+</section>
+
+
+  <!-- CUM FUNCȚIONEAZĂ -->
+  <section class="section reveal" id="how-it-works">
+    <h2 style="font-family: 'Times New Roman', Times, serif; font-size: 40px;">Cum funcționează un atac de inginerie socială</h2>
+    <p class="intro-text" style="font-family: 'Times New Roman', Times, serif; font-size: 25px;">
+      Metodele de inginerie socială se numără printre cele mai frecvent utilizate tactici, deoarece factorul uman reprezintă adesea cea mai vulnerabilă verigă. Un atac poate fi declanșat rapid, printr-un simplu email, sau se poate desfășura pe parcursul mai multor luni, implicând interacțiuni pe rețelele sociale sau chiar contacte directe, față în față.
+    </p>
+
+    <!-- DIAGRAMĂ -->
+    <div class="attack-diagram">
+      <button class="step active" data-step="1" style="font-family: 'Times New Roman', Times, serif; font-size: 18px;">Planificare atac</button>
+      <button class="step" data-step="2" style="font-family: 'Times New Roman', Times, serif; font-size: 18px;">Culegere informații</button>
+      <button class="step" data-step="3" style="font-family: 'Times New Roman', Times, serif; font-size: 18px;">Pregătire atac</button>
+      <button class="step" data-step="4" style="font-family: 'Times New Roman', Times, serif; font-size: 18px;">Infiltrare</button>
+      <button class="step" data-step="5" style="font-family: 'Times New Roman', Times, serif; font-size: 18px;">Exploatare</button>
+      <button class="step" data-step="6" style="font-family: 'Times New Roman', Times, serif; font-size: 18px;">Revizuire informații</button>
+      <button class="step" data-step="7" style="font-family: 'Times New Roman', Times, serif; font-size: 18px;">Retragere</button>
+    </div>
+
+    <!-- LAYOUT DOUĂ COLOANE -->
+    <div class="step-layout">
+      <!-- INFO PAS -->
+      <div class="step-info">
+        <h3 id="step-title" style="font-family: 'Times New Roman', Times, serif; font-size: 23px;">Planificare atac</h3>
+        <p id="step-description" style="font-family: 'Times New Roman', Times, serif; font-size: 19px;"></p>
+        <div class="step-example">
+          <h4 style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">📌 Exemplu concret</h4>
+          <p id="step-example" style="font-family: 'Times New Roman', Times, serif; font-size: 19px;"></p>
+        </div>
+        <div class="step-detect">
+          <h4 style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">🛡️ Cum putea fi detectat acest pas</h4>
+          <ul id="step-detect" style="font-family: 'Times New Roman', Times, serif; font-size: 19px;"></ul>
+        </div>
+      </div>
+
+      <!-- STATISTICI DINAMICE -->
+      <div class="stats-box">
+        <h4 style="font-family: 'Times New Roman', Times, serif; font-size: 23px;">📊 Statistici relevante</h4>
+        <div class="stat">
+          <span class="stat-number" data-target="0">0</span>%
+          <p class="stat-text" style="font-family: 'Times New Roman', Times, serif; font-size: 19px;"></p>
+        </div>
+        <div class="stat">
+          <span class="stat-number" data-target="0">0</span>%
+          <p class="stat-text" style="font-family: 'Times New Roman', Times, serif; font-size: 19px;"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPURI ATACURI -->
+  <section class="timeline-section" id="types">
+  <h2 style="font-size: 40px; font-family: 'Times New Roman', Times, serif; text-align: center;">Tipuri comune de atacuri</h2>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-point"></div>
+      <div class="timeline-content">
+        <h3>Phishing</h3>
+        <p>
+          Atacatorii folosesc e‑mailuri, mesaje sau linkuri frauduloase către site‑uri care imită platforme legitime, 
+          pentru a păcăli destinatarii să dea clic și să divulge informații sensibile, precum parole, date ale cardurilor bancare sau date personale.
+
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-point"></div>
+      <div class="timeline-content">
+        <h3>Spear-phishingul</h3>
+        <p>
+          Similar phishingului, dar mult mai bine direcționat: pentru a fi și mai convingători, 
+          atacatorii personalizează mesajele folosind informații specifice despre potențiala victimă.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-point"></div>
+      <div class="timeline-content">
+        <h3>Baiting</h3>
+        <p>
+          Atacatorii oferă ceva aparent atractiv, precum descărcarea gratuită a unui software, în schimbul furnizării de date personale 
+          sau al accesului la sistem, folosind adesea fișiere sau linkuri infectate.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-point"></div>
+      <div class="timeline-content">
+        <h3>Pretexting</h3>
+        <p>
+          Atacatorii construiesc un scenariu sau un pretext fals pentru a obține informații, recurgând frecvent la 
+          uzurparea identității unei persoane de încredere, precum un coleg sau un reprezentant al unei bănci.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-point"></div>
+      <div class="timeline-content">
+        <h3>Vishingul</h3>
+        <p>
+          O variantă de phishing realizată prin apeluri telefonice, în care atacatorii se dau drept entități de încredere 
+          pentru a determina victimele să divulge informații sensibile.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-point"></div>
+      <div class="timeline-content">
+        <h3>Ransomware-ul și extorcarea de fonduri</h3>
+        <p>
+          Atacatorii amenință cu divulgarea informațiilor sensibile sau cu compromiterea funcționării sistemelor 
+          în cazul neplății unei răscumpărări, folosind intimidarea și inducerea fricii pentru a constrânge victimele.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+  <!-- SEMNE ATAC -->
+  <section class="section reveal recognize-interactive" id="signs">
+
+  <div class="recognize-wrapper">
+
+    <!-- STÂNGA: termeni -->
+    <div class="recognize-left">
+      <h2 style="font-family: 'Times New Roman', Times, serif; font-size: 40px;">Cum să recunoaștem un atac de inginerie socială</h2>
+      <div class="term active" data-term="urgenta">
+        Urgență artificială
+        <p class="term-desc">
+          Atacatorul creează intenționat un sentiment puternic de urgență, insistând asupra necesității unei acțiuni imediate. 
+          Această tactică reduce timpul de analiză al victimei și îi afectează capacitatea de a gândi rațional, crescând șansele de a lua o decizie greșită.
+        </p>
+      </div>
+
+      <div class="term" data-term="emotii">
+        Exploatare emoțională
+        <p class="term-desc">
+          Atacatorul exploatează reacțiile emoționale ale victimei, precum frica, panica, vinovăția sau compasiunea, 
+          pentru a influența comportamentul acesteia și a o determina să acționeze în favoarea sa.
+        </p>
+      </div>
+
+      <div class="term" data-term="date">
+        Date confidențiale
+        <p class="term-desc">
+          Instituțiile și departamentele unei companii nu solicită niciodată prin e-mail sau telefon 
+          parole, coduri PIN, token-uri din aplicații, date financiare ori alte informații confidențiale.
+        </p>
+      </div>
+
+      <div class="term" data-term="promisiuni">
+        Promisiuni atrăgătoare
+        <p class="term-desc">
+          Fii precaut în fața cadourilor neașteptate primite pe rețelele sociale sau a „oportunităților de afaceri” 
+          care par prea bune ca să fie adevărate și sunt prezentate ca fiind limitate în timp.
+        </p>
+      </div>
+
+      <div class="term" data-term="vag">
+        Mesaje vagi
+        <p class="term-desc">
+          Atacatorul furnizează detalii insuficiente sau vagi, cu scopul de a ascunde adevăratele sale intenții și de a induce în eroare victima.
+        </p>
+      </div>
+
+      <div class="term" data-term="email">
+        Comunicare prin e-mail neobișnuit
+        <p class="term-desc">
+          Adresa expeditorului conține numere și caractere aleatorii sau include elemente suplimentare față de domeniul oficial, indicând o posibilă tentativă de fraudă.
+        </p>
+      </div>
+    </div>
+
+    <!-- DREAPTA: imagine -->
+    <div class="recognize-right">
+      <img src="mesaje.jpg" alt="Avertizare inginerie socială">
+      <img src="mesaje2.jpg" alt="Avertizare inginerie socială">
+      <img src="anaf-fake.jpg" alt="Avertizare inginerie socială">
+      <img src="mesajcurier.jpg" alt="Avertizare inginerie socială">
+    </div>
+
+  </div>
+</section>
+
+  <!-- CUM TE PROTEJEZI -->
+<section id="protection" style="padding: 40px 20px; text-align: center; color: #fff; font-family: 'Times New Roman', Times, serif; position: relative;">
+
+  <!-- TITLU -->
+  <h2 style="font-size: 40px; margin-bottom: 50px; margin-left: 30px; position: relative; z-index: 2;">
+    Cum te protejezi împotriva ingineriei sociale
+  </h2>
+
+  <!-- CONTAINER METODE -->
+  <div class="protection-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1000px; margin: 0 auto; position: relative; font-family: 'Times New Roman', Times, serif;">
+
+    <!-- METODĂ 1 -->
+    <div class="method" data-level="5" style="width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, #4a90e2, #50e3c2); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: transform 0.3s, box-shadow 0.3s;">
+      <span style="text-align:center; font-size: 18px; font-family: 'Times New Roman', Times, serif;">💭 Evaluați linkurile înainte de accesare</span>
+      <div class="tooltip" style="position: absolute; background: #222; padding: 15px; border-radius: 10px; top: 220px; left: 50%; transform: translateX(-50%); display: none; width: 250px; font-size: 16px; z-index: 1000; font-family: 'Times New Roman', Times, serif;">
+        Evită să dai click pe linkuri suspecte sau atașamente. Verifică expeditorul înainte de orice acțiune.
+      </div>
+    </div>
+
+    <!-- METODĂ 2 -->
+    <div class="method" data-level="4" style="width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, #e94e77, #d68189); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: transform 0.3s, box-shadow 0.3s;">
+      <span style="text-align:center; font-size: 18px; font-family: 'Times New Roman', Times, serif;">🛡️ Protejați informațiile personale</span>
+      <div class="tooltip" style="position: absolute; background: #222; padding: 15px; border-radius: 10px; top: 220px; left: 50%; transform: translateX(-50%); display: none; width: 250px; font-size: 16px; z-index: 1000; font-family: 'Times New Roman', Times, serif;">
+        Nu divulgați informații sensibile online sau prin telefon fără să verificați sursa.
+      </div>
+    </div>
+
+    <!-- METODĂ 3 -->
+    <div class="method" data-level="5" style="width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, #f5a623, #f8e71c); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: transform 0.3s, box-shadow 0.3s;">
+      <span style="text-align:center; font-size: 18px; font-family: 'Times New Roman', Times, serif;">🔑 Utilizați parole complexe și unice</span>
+      <div class="tooltip" style="position: absolute; background: #222; padding: 15px; border-radius: 10px; top: 220px; left: 50%; transform: translateX(-50%); display: none; width: 250px; font-size: 16px; z-index: 1000; font-family: 'Times New Roman', Times, serif;">
+        Folosește parole complexe și unice pentru fiecare cont, cu litere, cifre și simboluri.
+      </div>
+    </div>
+
+    <!-- METODĂ 4 -->
+    <div class="method" data-level="5" style="width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, #7ed321, #417505); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: transform 0.3s, box-shadow 0.3s;">
+      <span style="text-align:center; font-size: 18px; font-family: 'Times New Roman', Times, serif;">🔐 Activați autentificarea multifactor (MFA)</span>
+      <div class="tooltip" style="position: absolute; background: #222; padding: 15px; border-radius: 10px; top: 220px; left: 50%; transform: translateX(-50%); display: none; width: 250px; font-size: 16px; z-index: 1000; font-family: 'Times New Roman', Times, serif;">
+        Activează 2FA pentru conturi importante, pentru un nivel suplimentar de securitate.
+      </div>
+    </div>
+
+    <!-- METODĂ 5 -->
+    <div class="method" data-level="3" style="width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, #bd10e0, #9013fe); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: transform 0.3s, box-shadow 0.3s;">
+      <span style="text-align:center; font-size: 18px; font-family: 'Times New Roman', Times, serif;">📞 Validați identitatea solicitantului</span>
+      <div class="tooltip" style="position: absolute; background: #222; padding: 15px; border-radius: 10px; top: 220px; left: 50%; transform: translateX(-50%); display: none; width: 250px; font-size: 16px; z-index: 1000; font-family: 'Times New Roman', Times, serif;">
+        Nu furnizați informații fără să verificați persoana care vă contactează printr-un canal oficial.
+      </div>
+    </div>
+
+    <!-- METODĂ 6 -->
+    <div class="method" data-level="4" style="width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, #50e3c2, #4a90e2); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: transform 0.3s, box-shadow 0.3s;">
+      <span style="text-align:center; font-size: 18px; font-family: 'Times New Roman', Times, serif;">🔄 Fiți la curent cu amenințările de securitate</span>
+      <div class="tooltip" style="position: absolute; background: #222; padding: 15px; border-radius: 10px; top: 220px; left: 50%; transform: translateX(-50%); display: none; width: 250px; font-size: 16px; z-index: 1000; font-family: 'Times New Roman', Times, serif;">
+        Actualizează constant software-ul și aplicațiile pentru a preveni vulnerabilități.
+      </div>
+    </div>
+
+    <!-- METODĂ 7 -->
+    <div class="method" data-level="5" style="width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, #f8e71c, #f5a623); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: transform 0.3s, box-shadow 0.3s;">
+      <span style="text-align:center; font-size: 18px; font-family: 'Times New Roman', Times, serif;">✅ Folosiți canale și platforme de încredere</span>
+      <div class="tooltip" style="position: absolute; background: #222; padding: 15px; border-radius: 10px; top: 220px; left: 50%; transform: translateX(-50%); display: none; width: 250px; font-size: 16px; z-index: 1000; font-family: 'Times New Roman', Times, serif;">
+        Descărcați aplicații și informații doar de pe site-uri și magazine oficiale. Evitați linkuri necunoscute.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+  <!-- FINAL -->
+  <section class="section reveal final">
+    <h2 style="font-size: 50px; font-family: 'Times New Roman', Times, serif;">Educația este cel mai bun firewall</h2>
+    <p style="font-size: 30px; font-family: 'Times New Roman', Times, serif;">Un utilizator informat este cea mai puternică măsură de securitate.</p>
+  </section>
+
+
+  <!-- LOTTIE -->
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+<!-- SCRIPT -->
+<script src="script.js"></script>
+
+</div>
+</body>
+</html>
+
